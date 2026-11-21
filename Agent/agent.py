@@ -14,6 +14,7 @@ import os
 import json
 import asyncio
 
+from asyncio import tools
 from litellm import completion
 from fastmcp import client          
 
@@ -103,11 +104,34 @@ async def tool_calling_loop(user_question: str):
     # Initialize the LLM with the Gemini API key and model
     for iteration in range(3):  # Limit the number of iterations to avoid infinite loops
         # Send the user question and tool definitions to the LLM
-        response = completion(
-            model=MODEL,
-            messages=message_history,
-            tools=MCP_TOOLS,
-            tool_choice="auto",
+        try:
+            print("\n[INFO] Sending request to Groq...")
+
+            print("[DEBUG] Tools being sent:")
+            print(json.dumps(tools, indent=2, default=str))
+            response = completion(
+                model=MODEL,
+                api_key=GROQ_API_KEY,
+                messages=message_history,
+                tools=MCP_TOOLS,
+                tool_choice="auto",
+                max_tokens=100
+            )
+
+            print("[SUCCESS] Groq response received!")
+            print(response)
+        except Exception as e:
+            print(f"Error occurred while calling LLM: {str(e)}")
+            break
+
+        # Get the LLM's response
+        llm_message = response["choices"][0]["message"]
+        message_history.append(llm_message)
+
+        # Check if the LLM has produced a final answer
+        if llm_message["role"] == "assistant" and "final_answer" in llm_message:
+            print("Final Answer:", llm_message["final_answer"])
+            break
             max_tokens=100
         )
         # Get the LLM's response
