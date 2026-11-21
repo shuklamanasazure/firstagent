@@ -10,6 +10,7 @@
 # 5. Send tool results back to the LLM.
 # 6. Repeat until the LLM produces a final answer.
 
+from multiprocessing.dummy.connection import Client
 import os
 import json
 import asyncio
@@ -71,8 +72,13 @@ MCP_TOOLS = [
     }   
 ]
 
-def convert_mcp_tools(mcp_tools):
+async def convert_mcp_tools():
     """Convert MCP tool definitions into a format suitable for the LLM."""
+    async with Client("http://localhost:8000/mcp") as client:
+            # Step 1: Discover MCP tools
+            print("[INFO] Fetching MCP tools...")
+    
+            mcp_tools = await client.list_tools()
     converted_tools = []
     for tool in mcp_tools:
         converted_tool = {
@@ -97,6 +103,10 @@ async def execute_mcp_tool(tool_name: str, parameters: dict) -> dict:
 
 # Tool calling Loop using LLM to decide which tool to invoke based on user input and tool definitions.
 async def tool_calling_loop(user_question: str):
+
+
+
+
     message_history = [
         {"role": "system", "content": "You are an AI agent that can call tools to answer user questions."},
         {"role": "user", "content": user_question}
@@ -158,5 +168,5 @@ async def tool_calling_loop(user_question: str):
 if __name__ == "__main__":
     user_question = input("Enter your question: ")
     if MODEL.startswith("groq"):
-        MCP_TOOLS = convert_mcp_tools(MCP_TOOLS)  # Convert MCP tools for Groq model
+        MCP_TOOLS = convert_mcp_tools()  # Convert MCP tools for Groq model
     asyncio.run(tool_calling_loop(user_question))  
