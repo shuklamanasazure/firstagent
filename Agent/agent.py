@@ -110,7 +110,7 @@ async def tool_calling_loop(user_question: str, MCP_TOOLS):
             print("\n[INFO] Sending request to Groq...")
 
             print("[DEBUG] Tools being sent:")
-            print(json.dumps(tools, indent=2, default=str))
+            print(json.dumps(MCP_TOOLS, indent=2, default=str))
             response = completion(
                 model=MODEL,
                 api_key=GROQ_API_KEY,
