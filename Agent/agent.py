@@ -88,7 +88,7 @@ async def tool_calling_loop(user_question: str):
             model=MODEL,
             messages=message_history,
             tools=MCP_TOOLS,
-            tool_choice="auto"
+            tool_choice="auto",
             max_tokens=500
         )
         # Get the LLM's response
