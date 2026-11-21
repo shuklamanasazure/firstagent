@@ -132,8 +132,7 @@ async def tool_calling_loop(user_question: str):
         if llm_message["role"] == "assistant" and "final_answer" in llm_message:
             print("Final Answer:", llm_message["final_answer"])
             break
-            max_tokens=100
-        )
+            
         # Get the LLM's response
         llm_message = response["choices"][0]["message"]
         message_history.append(llm_message)
