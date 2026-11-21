@@ -4,7 +4,7 @@
 from fastmcp import FastMCP
 import httpx
 
-mcp = FASTMCP("MCP Server", "0.1.0")
+mcp = FastMCP("MCP Server", "0.1.0")
 
 #Tool to get weather data from Open-Meteo API
 @mcp.tool()
