@@ -55,7 +55,10 @@ async def get_exchange_rate(amount: float, base_currency: str, target_currency: 
 
 if __name__ == "__main__":
     # Run the MCP server on localhost:8000
-    mcp.run(host="127.0.0.1", port=8000)
+    mcp.run(
+        transport="http",
+        host="127.0.0.1", 
+        port=8000)
 
 # We have exposed two Python functions as MCP tools using the @mcp.tool() decorator.
 
