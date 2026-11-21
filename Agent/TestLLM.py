@@ -10,7 +10,7 @@ tools = [
             "parameters": {
                 "type": "object",
                 "properties": {
-                    "city": {
+                    "location": {
                         "type": "string"
                     }
                 },
