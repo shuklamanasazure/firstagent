@@ -72,13 +72,9 @@ MCP_TOOLS = [
     }   
 ]
 
-async def convert_mcp_tools():
+def convert_mcp_tools():
     """Convert MCP tool definitions into a format suitable for the LLM."""
-    async with Client("http://localhost:8000/mcp") as client:
-            # Step 1: Discover MCP tools
-            print("[INFO] Fetching MCP tools...")
-    
-            mcp_tools = await client.list_tools()
+    mcp_tools = MCP_TOOLS
     converted_tools = []
     for tool in mcp_tools:
         converted_tool = {
