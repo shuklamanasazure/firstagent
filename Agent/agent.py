@@ -70,6 +70,20 @@ MCP_TOOLS = [
     }   
 ]
 
+def convert_mcp_tools(mcp_tools):
+    """Convert MCP tool definitions into a format suitable for the LLM."""
+    converted_tools = []
+    for tool in mcp_tools:
+        converted_tool = {
+            "name": tool["name"],
+            "description": tool["description"],
+            "parameters": tool["parameters"]
+        }
+        converted_tools.append(converted_tool)
+    return converted_tools
+
+
+
 # Execute an MCP tool by sending a request to the MCP server and returning the result.
 async def execute_mcp_tool(tool_name: str, parameters: dict) -> dict:
     async with client.Client(MCP_SERVER) as mcp_client:
@@ -117,4 +131,6 @@ async def tool_calling_loop(user_question: str):
 
 if __name__ == "__main__":
     user_question = input("Enter your question: ")
+    if MODEL.startswith("groq"):
+        MCP_TOOLS = convert_mcp_tools(MCP_TOOLS)  # Convert MCP tools for Groq model
     asyncio.run(tool_calling_loop(user_question))  
