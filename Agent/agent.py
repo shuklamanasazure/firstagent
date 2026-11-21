@@ -160,5 +160,5 @@ async def tool_calling_loop(user_question: str, MCP_TOOLS):
 if __name__ == "__main__":
     user_question = input("Enter your question: ")
     if MODEL.startswith("groq"):
-        MCP_TOOLS = await convert_mcp_tools()  # Convert MCP tools for Groq model
+        MCP_TOOLS = convert_mcp_tools()  # Convert MCP tools for Groq model
     asyncio.run(tool_calling_loop(user_question, MCP_TOOLS))  
