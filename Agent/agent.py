@@ -24,7 +24,7 @@ load_dotenv()  # Load environment variables from .env file
 # Gemini API key from environment variable
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
 
-MODEL = "gemini/gemini-2.5-flash"    # Model to use for the LLM     
+MODEL = "gemini/gemini-3.8-flash"    # Model to use for the LLM     
 
 MCP_SERVER = "http://127.0.0.1:8000/mcp"  # MCP server URL
 
