@@ -26,7 +26,7 @@ load_dotenv()  # Load environment variables from .env file
 GROQ_API_KEY = os.getenv("GROQ_API_KEY")
 
 # MODEL = "gemini/gemini-3.8-flash"    # Model to use for the LLM   
-MODEL = "qwen/qwen3.8-27b"    # Model to use for the LLM
+MODEL = "groq/qwen/qwen3.8-27b"    # Model to use for the LLM
 
 MCP_SERVER = "http://127.0.0.1:8000/mcp"  # MCP server URL
 
@@ -91,7 +91,7 @@ async def tool_calling_loop(user_question: str):
             messages=message_history,
             tools=MCP_TOOLS,
             tool_choice="auto",
-            max_tokens=500
+            max_tokens=100
         )
         # Get the LLM's response
         llm_message = response["choices"][0]["message"]
