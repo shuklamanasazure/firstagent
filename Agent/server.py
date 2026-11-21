@@ -1,7 +1,7 @@
 # Create the MCP server, We will use two real APIs: Weather: Open-Meteo (free, no API key required). 
 # Currency: Frankfurter API (exchange-rate data, no API key required).
 
-from fastmcp import FASTMCP
+from fastmcp import FastMCP
 import httpx
 
 mcp = FASTMCP("MCP Server", "0.1.0")
