@@ -85,9 +85,10 @@ async def tool_calling_loop(user_question: str):
     for iteration in range(3):  # Limit the number of iterations to avoid infinite loops
         # Send the user question and tool definitions to the LLM
         response = completion(
-            Model=MODEL,
+            model=MODEL,
             messages=message_history,
             tools=MCP_TOOLS,
+            tool_choice="auto"
             max_tokens=500
         )
         # Get the LLM's response
