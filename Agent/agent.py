@@ -102,11 +102,7 @@ async def execute_mcp_tool(tool_name: str, parameters: dict) -> dict:
         return result
 
 # Tool calling Loop using LLM to decide which tool to invoke based on user input and tool definitions.
-async def tool_calling_loop(user_question: str):
-
-
-
-
+async def tool_calling_loop(user_question: str, MCP_TOOLS):
     message_history = [
         {"role": "system", "content": "You are an AI agent that can call tools to answer user questions."},
         {"role": "user", "content": user_question}
@@ -168,5 +164,5 @@ async def tool_calling_loop(user_question: str):
 if __name__ == "__main__":
     user_question = input("Enter your question: ")
     if MODEL.startswith("groq"):
-        MCP_TOOLS = convert_mcp_tools()  # Convert MCP tools for Groq model
-    asyncio.run(tool_calling_loop(user_question))  
+        MCP_TOOLS = await convert_mcp_tools()  # Convert MCP tools for Groq model
+    asyncio.run(tool_calling_loop(user_question, MCP_TOOLS))  
