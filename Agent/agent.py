@@ -75,9 +75,12 @@ def convert_mcp_tools(mcp_tools):
     converted_tools = []
     for tool in mcp_tools:
         converted_tool = {
-            "name": tool["name"],
-            "description": tool["description"],
-            "parameters": tool["parameters"]
+            "type": "function",
+            "function": {
+                "name": tool["name"],
+                "description": tool["description"],
+                "parameters": tool["parameters"]
+            }
         }
         converted_tools.append(converted_tool)
     return converted_tools
