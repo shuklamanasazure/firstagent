@@ -230,9 +230,13 @@ async def tool_calling_loop(user_question: str, MCP_TOOLS):
                     max_tokens=500,
                     temperature=0,
                     response_format={
-                        "type": "json",
-                        "schema": AgentResponse.model_json_schema()
-                    }
+                        "type": "json_schema",
+                        "json_schema": {
+                            "name": "agent_response",
+                            "schema": AgentResponse.model_json_schema(),
+                            "strict": False
+                        }
+                }
                 )
 
             print("[SUCCESS] Groq response received!")
