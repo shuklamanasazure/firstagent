@@ -276,7 +276,8 @@ async def tool_calling_loop(user_question: str, MCP_TOOLS):
         # STEP 7: Execute MCP tool calls.
         for tool_call in tool_calls:
             tool_name = tool_call.function.name
-            parameters = tool_call.function.parameters
+            # parameters = tool_call.function.parameters
+            parameters = json.loads(tool_call.function.arguments)
 
             try:
                 if isinstance(parameters, dict):
