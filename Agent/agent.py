@@ -22,7 +22,7 @@ from fastmcp import client
 from dotenv import load_dotenv
 from pydantic import ValidationError, Field
 
-from Agent.schemas import (
+from schemas import (
     GetWeatherInput, 
     GetExchangeRateInput,
     WeatherData,
