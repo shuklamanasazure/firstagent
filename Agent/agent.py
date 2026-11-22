@@ -167,7 +167,7 @@ async def tool_calling_loop(user_question: str, MCP_TOOLS):
     max_iterations = 3
 
     # Initialize the LLM with the Gemini API key and model
-    for iteration in range(1, max_iterations + 1):  # Limit the number of iterations to avoid infinite loops
+    for iteration in range(1, max_iterations):  # Limit the number of iterations to avoid infinite loops
         print(f"\n[INFO] Iteration {iteration} of {max_iterations}")
 
         # Create Pydantic input for this iteration.
