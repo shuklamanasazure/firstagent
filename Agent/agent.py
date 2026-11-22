@@ -14,6 +14,7 @@ from multiprocessing.dummy.connection import Client
 import os
 import json
 import asyncio
+import uuid
 
 # from asyncio import tools
 from litellm import completion
@@ -216,8 +217,10 @@ async def tool_calling_loop(user_question: str, MCP_TOOLS):
                                         "status": "success",
                                         "answer": "Your final answer",
                                         "tools_used": ["weather_tool"],
-                                        "iterations_used": 3
+                                        "observations": ["ToolObservation"],
                                         }
+                                        Do not include request_id.
+                                        Do not include iterations_used
 
                                         Status must be success, partial or failed.
                                         Do not invent missing information.
@@ -268,11 +271,11 @@ async def tool_calling_loop(user_question: str, MCP_TOOLS):
             content = llm_message.content
             try:
                 final_json = json.loads(content)
+                print("\n[INFO] Final response from LLM:")
 
                 # Validate final response using Pydantic.
                 final_response = AgentResponse.model_validate(final_json)
-                print("\n[INFO] Final response from LLM:")
-                print(final_response.model_dump_json(indent=2))
+                print(final_response.model_dump_json(indent=4))
             except json.JSONDecodeError as e:
                 print(f"[ERROR] Failed to parse final response as JSON: {str(e)}")
                 break
