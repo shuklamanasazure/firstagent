@@ -167,7 +167,7 @@ async def tool_calling_loop(user_question: str, MCP_TOOLS):
     max_iterations = 3
 
     # Initialize the LLM with the Gemini API key and model
-    for iteration in range(1, max_iterations):  # Limit the number of iterations to avoid infinite loops
+    for iteration in range(1, max_iterations + 1):  # Limit the number of iterations to avoid infinite loops
         print(f"\n[INFO] Iteration {iteration} of {max_iterations}")
 
         # Create Pydantic input for this iteration.
@@ -275,6 +275,7 @@ async def tool_calling_loop(user_question: str, MCP_TOOLS):
 
         # STEP 7: Execute MCP tool calls.
         for tool_call in tool_calls:
+            tool_call_id = tool_call.id
             tool_name = tool_call.function.name
             # parameters = tool_call.function.parameters
             parameters = json.loads(tool_call.function.arguments)
@@ -297,7 +298,7 @@ async def tool_calling_loop(user_question: str, MCP_TOOLS):
                 # Execute MCP tool.
                 # This validates arguments and result internally.
 
-                print(f"\n[INFO] LLM requested tool: {tool_name} with parameters: {parameters}")
+                print(f"\n[INFO] LLM requested tool: {tool_name} using ID: {tool_call_id} with parameters: {parameters}")
 
                 # Execute the requested MCP tool
                 
@@ -325,7 +326,7 @@ async def tool_calling_loop(user_question: str, MCP_TOOLS):
              
             except Exception as e:
                 print(f"[ERROR] Error executing tool {tool_name}: {str(e)}")
-                message_history.append({"role": "tool", "content": f"Error executing tool {tool_name}: {str(e)}"})
+                message_history.append({"role": "tool", "tool_call_id": tool_call_id, "content": f"Error executing tool {tool_name}: {str(e)}"})
 
     # STEP 8: Handle exhausted iteration budget.
     # --------------------------------------------------
