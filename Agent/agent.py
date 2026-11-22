@@ -285,22 +285,25 @@ async def tool_calling_loop(user_question: str, MCP_TOOLS):
             tool_call_id = tool_call.id
             tool_name = tool_call.function.name
             # parameters = tool_call.function.parameters
-            parameters = json.loads(tool_call.function.arguments)
+            raw_arguments = json.loads(tool_call.function.arguments)
 
             try:
-                if isinstance(parameters, dict):
-                    parameters = json.loads(parameters)
-                    # Validate tool input parameters using Pydantic.
-                    validated_parameters = validate_tool_input(tool_name, parameters)
+                if isinstance(raw_arguments, str):
+                    parameters = json.loads(raw_arguments)
+                elif isinstance(raw_arguments, dict):
+                    parameters = raw_arguments
                 else:
-                    parameters = parameters
-
+                    raise ValueError("Tool arguments must be JSON or a dictionary")
+                    # Validate tool input parameters using Pydantic.
+                
+                validated_parameters = validate_tool_input(tool_name, parameters)
+                
                 print(
                     f"\n[INFO] Executing MCP tool: {tool_name}"
                 )
 
                 print("[DEBUG] Raw tool arguments:")
-                print(parameters)
+                print(validated_parameters)
 
                 # Execute MCP tool.
                 # This validates arguments and result internally.
@@ -309,7 +312,7 @@ async def tool_calling_loop(user_question: str, MCP_TOOLS):
 
                 # Execute the requested MCP tool
                 
-                tool_result = await execute_mcp_tool(tool_name, parameters)
+                tool_result = await execute_mcp_tool(tool_name, validated_parameters)
                 print(f"[SUCCESS] Tool {tool_name} executed successfully. Result: {tool_result}")
                 observation = ToolObservation(
                         tool_name=tool_name,
@@ -328,7 +331,9 @@ async def tool_calling_loop(user_question: str, MCP_TOOLS):
                     observation.model_dump(mode="json")
                 )
 
-                print("[SUCCESS] MCP tool executed")
+                message_history.append({"role": "tool", "tool_call_id": tool_call_id, "content": tool_content})
+
+                print(f"[SUCCESS] MCP tool {tool_name} executed")
    
              
             except Exception as e:
