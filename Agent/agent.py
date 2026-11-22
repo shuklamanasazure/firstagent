@@ -244,7 +244,7 @@ async def tool_calling_loop(user_question: str, MCP_TOOLS):
         # Get the LLM's response
         llm_message = response["choices"][0]["message"]
         # Convert the assistant message into a dictionary.
-        assistant_message = message_to_dict(llm_message)
+        assistant_message = llm_message.model_dump(exclude_none=True)
         message_history.append(assistant_message)
 
         # Extract tool calls using Groq's standard format.
